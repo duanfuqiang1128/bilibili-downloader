@@ -37,8 +37,6 @@ BILIBILI-DOWNLOADER
 # 致谢
 感谢 JetBrains 对本项目的支持。
 
-[![JetBrains](docs/IMG/jetbrains.svg)](https://www.jetbrains.com/?from=bilibili-downloader)
-
 # API 参考列表
 
 - **[Passkou/bilibili_api](https://github.com/Passkou/bilibili_api)**
