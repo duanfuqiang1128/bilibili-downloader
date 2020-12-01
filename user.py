@@ -7,7 +7,7 @@
 @License    : GNU GENERAL PUBLIC LICENSE
 """
 
-from sql import get_up_video, insert_video, get_up_name
+from sql import get_up_video, insert_video, get_up_name, get_up_all_track
 from config import get_session
 from bilibili_api.user import get_videos_raw
 
@@ -49,3 +49,7 @@ class User:
 
 def mid2name(mid):
     return get_up_name(mid)
+
+
+def get_track_up():
+    return get_up_all_track()
