@@ -23,18 +23,25 @@ class User:
 
     def update_video(self):
         page = 1
+        videos = []
         while True:
-            for video in get_videos_raw(uid=self._uid, pn=page)['list']['vlist']:
-                if video['bvid'] in self._videos:
-                    break
-                insert_video({
-                    'pic': video['pic'],
-                    'title': video['title'],
-                    'author': video['author'],
-                    'mid': video['mid'],
-                    'create': video['created'],
-                    'bvid': video['bvid'],
-                    'is_union_video': video['is_union_video']
-                })
+            try:
+                for video in get_videos_raw(uid=self._uid, pn=page)['list']['vlist']:
+                    if video['bvid'] in self._videos:
+                        raise ValueError
+                    videos.append({
+                        'pic': video['pic'],
+                        'title': video['title'],
+                        'author': video['author'],
+                        'mid': video['mid'],
+                        'create': video['created'],
+                        'bvid': video['bvid'],
+                        'is_union_video': video['is_union_video']
+                    })
+            except ValueError:
+                break
             page += 1
-
+        new_video_num = len(videos)
+        for i in range(new_video_num):
+            i += 1
+            insert_video(videos[new_video_num-i])
