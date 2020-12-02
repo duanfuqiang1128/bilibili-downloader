@@ -21,7 +21,12 @@ conn = sqlite3.connect(path.join(db_path, 'bilibili.db'))
 
 
 def get_up_name(mid):
-    pass
+    cursor = conn.cursor()
+    name = cursor.execute("SELECT name FROM up WHERE mid = ?", (mid,)).fetchone()
+    if not name:
+        return "None"
+    return name[0]
+
 
 def get_up_video():
     pass
