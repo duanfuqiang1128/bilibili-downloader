@@ -17,6 +17,7 @@ class User:
         self._uid = uid
         self._get_local_data()
         self._session = get_session()
+        self._up_name = mid2name(uid)
 
     def _get_local_data(self):
         self._videos = get_up_video(self._uid)
@@ -33,8 +34,8 @@ class User:
                     videos.append({
                         'pic': video['pic'],
                         'title': video['title'],
-                        'author': video['author'],
-                        'mid': video['mid'],
+                        'author': self._up_name,
+                        'mid': self._uid,
                         'create': video['created'],
                         'bvid': video['bvid'],
                         'is_union_video': video['is_union_video']
