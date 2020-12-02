@@ -109,7 +109,12 @@ def get_failed_video():
 
 
 def get_video_info(bvid):
-    pass
+    cursor = conn.cursor()
+    video_info = cursor.execute("SELECT mid, title FROM video WHERE bvid = ?", (bvid,)).fetchone()
+    return {
+        'mid': video_info[0],
+        'title': video_info[1],
+    }
 
 
 def set_video_dl_status_success(bvid: str):
