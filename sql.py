@@ -13,6 +13,8 @@ from os import path, makedirs
 from config import config
 from bilibili_api import user
 import bilibili_api
+from shutil import rmtree
+from user import mid2name
 
 db_path = path.join(config['DATA_PATH'], '.db')
 if not path.exists(db_path):
@@ -44,22 +46,40 @@ def add_up(mid):
     except sqlite3.OperationalError:
         pass
     try:
-        cursor.execute("INSERT INTO up VALUES (? , ?, ?, ?)", (mid, info['name'], info['face'], info['sign']))
+        cursor.execute("INSERT INTO up VALUES (?, ?, ?, ?)", (mid, info['name'], info['face'], info['sign'],))
         conn.commit()
     except sqlite3.IntegrityError:
         print('up主已经在跟踪中...'
               '\n请勿重复添加！')
         return
     print(f"添加成功：{info['name']}")
-    conn.close()
 
 
 def delete_up(mid):
-    pass
+    cursor = conn.cursor()
+    cursor.execute("DELETE FROM video where mid = ?", (mid,))
+    cursor.execute("DELETE FROM up where mid = ?", (mid,))
+    conn.commit()
+    if input('是否删除该up主所有视频文件?(yes/no)').strip() == 'yes':
+        try:
+            rmtree(path.join(config['DATA_PATH'], mid2name(mid)))
+        except FileNotFoundError:
+            pass
+    return True
 
 
 def insert_video(video):
-    pass
+    cursor = conn.cursor()
+    try:
+        cursor.execute("CREATE TABLE video (bvid TEXT PRIMARY KEY, title TEXT, mid INTEGER, author TEXT, status TEXT, is_union_video TEXT, create INTEGER, pic TEXT)")
+    except sqlite3.OperationalError:
+        pass
+    try:
+        cursor.execute("INSERT INTO video VALUES (?, ?, ?, ?, ?, ?, ?, ?)", (video['bvid'], video['title'], video['mid'], video['author'], 'deficiency', str(video['is_union_video']), video['create'], video['pic'],))
+        conn.commit()
+    except sqlite3.IntegrityError:
+        pass
+
 
 
 def get_failed_video():
