@@ -52,4 +52,7 @@ def mid2name(mid):
 
 
 def get_track_up():
-    return get_up_all_track()
+    temp_up_list = []
+    for up in get_up_all_track():
+        temp_up_list.append(up['mid'])
+    return temp_up_list
