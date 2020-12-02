@@ -95,7 +95,7 @@ class Video:
         temp_video_path = os.path.join(self._video_path_temp, 'video_temp.mp4')
         temp_audio_path = os.path.join(self._video_path_temp, 'audio_temp.mp4')
         video_path = os.path.join(self._video_path, f'{file_name}.mp4')
-        cmd = f'ffmpeg -i "{temp_audio_path}" -i "{temp_video_path}" -acodec copy -vcodec copy "{video_path}"'
+        cmd = f'ffmpeg -hide_banner -loglevel panic -i "{temp_audio_path}" -i "{temp_video_path}" -acodec copy -vcodec copy "{video_path}"'
         if os.system(cmd) != 0:
             return False
         try:
