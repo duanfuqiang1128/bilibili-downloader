@@ -12,9 +12,10 @@ from bilibili_api.video import get_download_url, get_pages
 from user import mid2name
 import os
 from shutil import rmtree
+from threading import Thread
 
 
-def get_media(url, file_path, media_range):
+def get_media_thread(url, media_content_list, index, media_range):
     session = get_session()
     session.headers.update({
         'Range': f'bytes={media_range}'
@@ -22,16 +23,44 @@ def get_media(url, file_path, media_range):
     try:
         r = session.get(url)
     except Exception:
-        return False
+        return
     if r.status_code != 206:
-        return False
+        return
+    media_content_list[index] = r
+
+
+def get_media(url, file_path, media_range):
+    media_range = media_range.split('-')
+    thread_num = config['THREAD']
+    start = int(media_range[0])
+    end = int(media_range[1])
+    step = int((end-start) / thread_num)
+    if end - start < thread_num * 10000000:
+        media_content_list = [None] * 1
+        get_media_thread(url, media_content_list, 0, f'{start}-{end}')
+    else:
+        media_content_list = [None] * thread_num
+        thread_pool = []
+        for index in range(thread_num):
+            thread_end = (index + 1) * step - 1
+            if index == thread_num - 1:
+                thread_end = end
+            thread_temp = Thread(target=get_media_thread, args=(url, media_content_list, index, f'{step*index}-{thread_end}'))
+            thread_pool.append(thread_temp)
+            thread_temp.start()
+        for thread in thread_pool:
+            thread.join()
     with open(file_path, 'ab+') as f:
-        f.write(r.content)
+        for r in media_content_list:
+            try:
+                f.write(r.content)
+            except AttributeError:
+                return False
     return True
 
 
 def _split_media(url) -> []:
-    split_step = 10000000  # 每个分段大小，单位是bytes
+    split_step = 200000000  # 每个分段大小，单位是bytes
     session = get_session()
     session.headers.update({
         'Range': 'bytes=0-10',
@@ -47,10 +76,10 @@ def _split_media(url) -> []:
     content_range = int(content_range[1])
     split_num = int(content_range / split_step)
     if split_num == 0:
-        return ['0-']
+        return [f'0-{content_range}']
     for i in range(split_num):
         split_list.append(f'{split_step*i}-{split_step*(i+1)-1}')
-    split_list.append(f'{split_step*split_num}-')
+    split_list.append(f'{split_step*split_num}-{content_range}')
     return split_list
 
 
