@@ -41,5 +41,11 @@ def delete_up(mid):
 
 
 def show_track_up():
+    count = 0
     for up in get_up_all_track():
         print('%-10s' % up['mid'], up['name'])
+        count += 1
+    if count == 0:
+        print('\n还没有跟踪的up主(～￣(OO)￣)ブ')
+        return
+    print(f'\n共跟踪{count}个up主 φ(≧ω≦*)♪')
