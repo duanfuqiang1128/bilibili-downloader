@@ -45,6 +45,7 @@ class User:
         for i in range(new_video_num):
             i += 1
             insert_video(videos[new_video_num-i])
+        return new_video_num
 
 
 def mid2name(mid):
