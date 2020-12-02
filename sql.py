@@ -13,7 +13,6 @@ from config import config
 from bilibili_api import user
 import bilibili_api
 from shutil import rmtree
-from user import mid2name
 
 db_path = path.join(config['DATA_PATH'], '.db')
 if not path.exists(db_path):
@@ -23,7 +22,6 @@ conn = sqlite3.connect(path.join(db_path, 'bilibili.db'))
 
 def get_up_name(mid):
     pass
-
 
 def get_up_video():
     pass
@@ -61,7 +59,7 @@ def delete_up(mid):
     conn.commit()
     if input('是否删除该up主所有视频文件?(yes/no)').strip() == 'yes':
         try:
-            rmtree(path.join(config['DATA_PATH'], mid2name(mid)))
+            rmtree(path.join(config['DATA_PATH'], get_up_name(mid)))
         except FileNotFoundError:
             pass
     return True
@@ -93,4 +91,4 @@ def set_video_dl_status_success(bvid: str):
 
 
 if __name__ == '__main__':
-    pass
+    add_up(206837580)
