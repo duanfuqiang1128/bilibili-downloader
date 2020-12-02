@@ -75,15 +75,15 @@ def add_up(mid):
 
 
 def delete_up(mid):
-    cursor = conn.cursor()
-    cursor.execute("DELETE FROM video where mid = ?", (mid,))
-    cursor.execute("DELETE FROM up where mid = ?", (mid,))
-    conn.commit()
     if input('是否删除该up主所有视频文件?(yes/no)').strip() == 'yes':
         try:
             rmtree(path.join(config['DATA_PATH'], get_up_name(mid)))
         except FileNotFoundError:
             pass
+    cursor = conn.cursor()
+    cursor.execute("DELETE FROM video where mid = ?", (mid,))
+    cursor.execute("DELETE FROM up where mid = ?", (mid,))
+    conn.commit()
     return True
 
 
@@ -109,7 +109,9 @@ def get_failed_video():
     cursor = conn.cursor()
     videos_temp = []
     for video in cursor.execute("SELECT bvid FROM video WHERE status = ?", ('deficiency',)).fetchall():
-        videos_temp.append(video[0])
+        videos_temp.append({
+            'bvid': video[0],
+        })
     return videos_temp
 
 
