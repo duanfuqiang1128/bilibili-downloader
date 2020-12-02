@@ -73,11 +73,16 @@ def delete_up(mid):
 def insert_video(video):
     cursor = conn.cursor()
     try:
-        cursor.execute("CREATE TABLE video (bvid TEXT PRIMARY KEY, title TEXT, mid INTEGER, author TEXT, status TEXT, is_union_video TEXT, create INTEGER, pic TEXT)")
+        cursor.execute("CREATE TABLE video (bvid TEXT PRIMARY KEY, title TEXT, mid INTEGER, author TEXT, status TEXT, "
+                       "is_union_video TEXT, create INTEGER, pic TEXT)")
     except sqlite3.OperationalError:
         pass
     try:
-        cursor.execute("INSERT INTO video VALUES (?, ?, ?, ?, ?, ?, ?, ?)", (video['bvid'], video['title'], video['mid'], video['author'], 'deficiency', str(video['is_union_video']), video['create'], video['pic'],))
+        cursor.execute("INSERT INTO video VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+                       (video['bvid'], video['title'], video['mid']
+                        , video['author'], 'deficiency',
+                        str(video['is_union_video']),
+                        video['create'], video['pic'],))
         conn.commit()
     except sqlite3.IntegrityError:
         pass
@@ -96,4 +101,4 @@ def set_video_dl_status_success(bvid: str):
 
 
 if __name__ == '__main__':
-    add_up(206837580)
+    pass
