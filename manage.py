@@ -14,6 +14,9 @@ from video import download_failed_video
 
 def update_video():
     ups = get_track_up()
+    if len(ups) == 0:
+        print('没有正在跟踪的up主！')
+        return 
     for up in ups:
         user = User(up)
         new_video_num = user.update_video()
