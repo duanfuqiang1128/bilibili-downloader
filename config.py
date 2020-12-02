@@ -15,6 +15,7 @@ config = {
         'CSRF': '',
     },
     'DATA_PATH': '',
+    'THREAD': 8,
 }
 
 verify = Verify(sessdata=config['BILIBILI']['SESSDATA'], csrf=config['BILIBILI']['CSRF'])
