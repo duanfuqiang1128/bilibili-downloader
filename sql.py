@@ -30,6 +30,11 @@ def get_up_name(mid):
 
 def get_up_video(mid):
     cursor = conn.cursor()
+    try:
+        cursor.execute("CREATE TABLE video (bvid TEXT PRIMARY KEY, title TEXT, mid INTEGER, author TEXT, status TEXT, "
+                       "is_union_video TEXT, create_time INTEGER, pic TEXT)")
+    except sqlite3.OperationalError:
+        pass
     videos_temp = cursor.execute("SELECT bvid from video where mid = ?", (mid,)).fetchall()
     videos = []
     for video in videos_temp:
