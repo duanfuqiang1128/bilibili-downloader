@@ -47,7 +47,6 @@ class User:
                 break
             page += 1
         new_video_num = len(videos)
-        print(page, '完成更新')
         for i in range(new_video_num):
             i += 1
             insert_video(videos[new_video_num-i])
