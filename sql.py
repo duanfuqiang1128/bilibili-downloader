@@ -38,7 +38,14 @@ def get_up_video(mid):
 
 
 def get_up_all_track():
-    pass
+    cursor = conn.cursor()
+    temp_up_list = []
+    for up in cursor.execute("SELECT mid, name FROM up").fetchall():
+        temp_up_list.append({
+            'mid': up[0],
+            'name': up[1],
+        })
+    return temp_up_list
 
 
 def add_up(mid):
