@@ -8,7 +8,6 @@
 """
 
 import sqlite3
-from time import sleep
 from os import path, makedirs
 from config import config
 from bilibili_api import user
@@ -79,7 +78,6 @@ def insert_video(video):
         conn.commit()
     except sqlite3.IntegrityError:
         pass
-
 
 
 def get_failed_video():
