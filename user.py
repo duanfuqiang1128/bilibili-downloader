@@ -19,7 +19,7 @@ class User:
         self._session = get_session()
 
     def _get_local_data(self):
-        self._videos = get_up_video()
+        self._videos = get_up_video(self._uid)
 
     def update_video(self):
         page = 1
