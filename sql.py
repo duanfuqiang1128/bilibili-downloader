@@ -101,7 +101,11 @@ def insert_video(video):
 
 
 def get_failed_video():
-    pass
+    cursor = conn.cursor()
+    videos_temp = []
+    for video in cursor.execute("SELECT bvid FROM video WHERE status = ?", ('deficiency',)).fetchall():
+        videos_temp.append(video[0])
+    return videos_temp
 
 
 def get_video_info(bvid):
