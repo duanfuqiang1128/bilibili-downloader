@@ -18,7 +18,7 @@ from user import mid2name
 db_path = path.join(config['DATA_PATH'], '.db')
 if not path.exists(db_path):
     makedirs(db_path)
-conn = sqlite3.connect(path.join(db_path, '.bilibili.db'))
+conn = sqlite3.connect(path.join(db_path, 'bilibili.db'))
 
 
 def get_up_name(mid):
