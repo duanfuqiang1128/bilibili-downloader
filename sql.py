@@ -118,7 +118,9 @@ def get_video_info(bvid):
 
 
 def set_video_dl_status_success(bvid: str):
-    pass
+    cursor = conn.cursor()
+    cursor.execute("UPDATE video SET status = ? WHERE bvid = ?", ('success', bvid,))
+    conn.commit()
 
 
 if __name__ == '__main__':
