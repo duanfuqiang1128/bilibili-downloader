@@ -27,9 +27,7 @@ def update_video():
 
 
 def add_up(mid):
-    if not sql.add_up(mid):
-        return False
-    return True
+    sql.add_up(mid)
 
 
 def delete_up(mid):
@@ -37,7 +35,6 @@ def delete_up(mid):
         print('删除失败！')
         return False
     print('删除成功！')
-    return True
 
 
 def show_track_up():
