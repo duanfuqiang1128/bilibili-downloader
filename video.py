@@ -115,6 +115,10 @@ class Video:
                 return False
             if not self._combine_video(f"P{page+1} {pages[page]['part']}"):
                 return False
+        try:
+            rmtree(self._video_path_temp)
+        except FileNotFoundError:
+            pass
         return True
 
 
