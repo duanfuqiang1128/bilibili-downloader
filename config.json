@@ -1,0 +1,14 @@
+{
+  "THREAD": {
+    "NUM": 8
+  },
+  "SEGMENT": {
+    "MAX_SIZE": 20,
+    "MIN_SIZE": 5
+  },
+  "DATA_PATH": "",
+  "BILIBILI_ACCOUNT": {
+    "SESSDATA": "",
+    "CSRF": ""
+  }
+}
