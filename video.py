@@ -11,7 +11,7 @@ from sql import get_failed_video, set_video_dl_status_success, get_video_info
 from bilibili_api.video import get_download_url, get_pages
 from user import mid2name
 import os
-from shutil import rmtree
+from shutil import rmtree, copy
 from threading import Thread
 
 
@@ -137,12 +137,30 @@ class Video:
     def get_video(self):
         pages = get_pages(bvid=self._bvid, verify=verify)
         for page in range(len(pages)):
-            info = get_download_url(bvid=self._bvid, page=page, verify=verify)
-            if not self._get_video(info['dash']['video'][0]['baseUrl']):
-                return False
-            if not self._get_audio(info['dash']['audio'][0]['baseUrl']):
-                return False
-            if not self._combine_video(f"P{page+1} {pages[page]['part']}"):
+            try:
+                info = get_download_url(bvid=self._bvid, page=page, verify=verify)
+                try:
+                    if not self._get_video(info['dash']['video'][0]['baseUrl']):
+                        return False
+                except KeyError:
+                    if not self._get_video(info['durl'][0]['url']):
+                        return False
+                    temp_video_path = os.path.join(self._video_path_temp, 'video_temp.mp4')
+                    file_name = f"P{page+1} {pages[page]['part']}"
+                    video_path = os.path.join(self._video_path, f'{file_name}.mp4')
+                    copy(temp_video_path, video_path)
+                    try:
+                        rmtree(self._video_path_temp)
+                    except FileNotFoundError:
+                        pass
+                    os.makedirs(self._video_path_temp)
+                    continue
+                if not self._get_audio(info['dash']['audio'][0]['baseUrl']):
+                    return False
+                if not self._combine_video(f"P{page+1} {pages[page]['part']}"):
+                    return False
+            except KeyError:
+                print(f'KeyError: bvid={self._bvid}, page={page}')
                 return False
         try:
             rmtree(self._video_path_temp)
