@@ -19,11 +19,67 @@ BILIBILI-DOWNLOADER
 
 **仓库地址: [duanfuqiang1128/bilibili-downloader](https://github.com/duanfuqiang1128/bilibili-downloader)**
 
+用到的第三方库：
+- requests
+- fire
+- bilibili_api
+
 ## 功能列表
 
 **请不要滥用相关API,让我们一起爱护B站 ❤**
 
-# 使用说明
+# 快速开始
+
+## 安装
+
+安装[ffmpeg](https://ffmpeg.org/download.html)
+
+### 下载程序
+[下载程序](https://github.com/duanfuqiang1128/bilibili-downloader/releases)
+
+解压后，进入程序目录，或将程序路径添加进系统环境变量
+`pontus help`
+
+### 源码编译安装
+
+**⚠️注意：需要有C编译环境，如gcc等**
+1. [下载源码](https://github.com/duanfuqiang1128/bilibili-downloader/releases)
+2. `pip install -r requirements.txt`
+3. `python -m nuitka --follow-imports --plugin-enable=pylint-warnings pontus.py`
+4. 将可执行文件 pontus 添加进系统环境变量
+
+**注意，在linux等系统中，需要赋予程序可执行权限**
+`chmod +x pontus`
+
+## 基本使用
+UID: 要跟踪up主的账号ID(UID/MID)
+
+### 基本命令
+`add UID`: 添加跟踪
+`delete UID`: 取消跟踪
+`show`: 显示所有跟踪的up主
+`help`: 帮助
+`update`: 更新视频
+
+### 设置
+**配置文件：config.json**
+**使用前，需要设置数据库的绝对路径**
+
+数据库路径：DATA_PATH
+
+如何让程序可以抓取大会员专享高清视频？需要在配置文件中添加自己的大会员账号
+#### 获取 SESSDATA 和 CSRF
+
+这里以 **谷歌浏览器** 为例。
+
+首先我们可以在链接栏左侧看到一个小锁，如果你没有使用HTTPS，那么可能会显示 `不安全` 的字样，点击以后，下面有个Cookies。
+
+![image-20201203202920825](README.assets/image-20201203202920825.png)
+
+点开后，我们在下面找到以下两个键对应的值，分别是 **SESSDATA** 和 **bili_jct**，这里注意一下，**bili_jct 就是 CSRF **。
+
+![image-20201203202959230](README.assets/image-20201203202959230.png)
+
 
 # 免责声明
 
