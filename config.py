@@ -8,14 +8,21 @@
 """
 from requests import session
 from bilibili_api import Verify
+from json import loads
 
+with open('config.json', 'rt', encoding='utf-8') as f:
+    user_config = loads(f.read())
 config = {
     'BILIBILI': {
-        'SESSDATA': '',
-        'CSRF': '',
+        'SESSDATA': user_config['BILIBILI_ACCOUNT']['SESSDATA'],
+        'CSRF': user_config['BILIBILI_ACCOUNT']['CSRF'],
     },
-    'DATA_PATH': '',
-    'THREAD': 8,
+    'DATA_PATH': user_config['DATA_PATH'],
+    'THREAD': user_config['THREAD']['NUM'],
+    'SEGMENT': {
+        "MAX_SIZE": user_config['SEGMENT']['MAX_SIZE'],
+        "MIN_SIZE": user_config['SEGMENT']['MIN_SIZE'],
+    },
 }
 
 verify = Verify(sessdata=config['BILIBILI']['SESSDATA'], csrf=config['BILIBILI']['CSRF'])
