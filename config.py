@@ -25,7 +25,10 @@ config = {
     },
 }
 
-verify = Verify(sessdata=config['BILIBILI']['SESSDATA'], csrf=config['BILIBILI']['CSRF'])
+if (config['BILIBILI']['SESSDATA'] == "") | (config['BILIBILI']['CSRF'] == ""):
+    verify = Verify()
+else:
+    verify = Verify(sessdata=config['BILIBILI']['SESSDATA'], csrf=config['BILIBILI']['CSRF'])
 
 
 def get_session():
