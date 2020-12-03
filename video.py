@@ -14,6 +14,8 @@ import os
 from shutil import rmtree, copy
 from threading import Thread
 
+MB = 1000000
+
 
 def get_media_thread(url, media_content_list, index, media_range):
     session = get_session()
@@ -35,7 +37,7 @@ def get_media(url, file_path, media_range):
     start = int(media_range[0])
     end = int(media_range[1])
     step = int((end-start) / thread_num)
-    if end - start < 5000000:
+    if end - start < config['SEGMENT']['MIN_SIZE'] * MB:
         media_content_list = [None] * 1
         get_media_thread(url, media_content_list, 0, f'{start}-{end}')
     else:
@@ -60,7 +62,7 @@ def get_media(url, file_path, media_range):
 
 
 def _split_media(url) -> []:
-    split_step = 20000000  # 每个分段大小，单位是bytes
+    split_step = config['SEGMENT']['MAX_SIZE'] * MB  # 每个分段大小，单位是bytes
     session = get_session()
     session.headers.update({
         'Range': 'bytes=0-10',
