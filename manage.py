@@ -12,6 +12,19 @@ from user import get_track_up, User, mid2name
 from video import download_failed_video
 
 
+def help_command():
+    print('''
+    这是一个管理和自动下载更新b站视频的工具
+
+    command
+      help          显示可用的命令列表和帮助文档
+      update        更新视频库
+      add           通过mid号来添加要跟踪的up主
+      delete        通过mid号从跟踪列表中移除up主
+      show          显示该视频库跟踪的up主列表
+    ''')
+
+
 def update_video():
     db_init()
     ups = get_track_up()
