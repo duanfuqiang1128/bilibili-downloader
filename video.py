@@ -128,7 +128,9 @@ class Video:
         temp_audio_path = os.path.join(self._video_path_temp, 'audio_temp.mp4')
         video_path = os.path.join(self._video_path, f'{file_name.strip()}.mp4')
         cmd = ['ffmpeg', '-hide_banner', '-loglevel', 'panic', '-i', temp_audio_path, '-i', temp_video_path, '-acodec', 'copy', '-vcodec', 'copy', video_path]
-        if subprocess.run(cmd) != 0:
+        try:
+            subprocess.run(cmd, capture_output=True, check=True)
+        except subprocess.CalledProcessError:
             return False
         try:
             rmtree(self._video_path_temp)
