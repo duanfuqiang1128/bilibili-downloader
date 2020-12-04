@@ -8,7 +8,7 @@
 """
 
 from sql import get_up_video, insert_video, get_up_name, get_up_all_track
-from config import get_session
+from config import get_session, clean_path
 from bilibili_api.user import get_videos_raw
 import logging
 
@@ -38,7 +38,7 @@ class User:
                         raise ValueError
                     videos.append({
                         'pic': video['pic'],
-                        'title': video['title'],
+                        'title': clean_path(video['title']),
                         'author': self._up_name,
                         'mid': self._uid,
                         'create': video['created'],

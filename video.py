@@ -6,7 +6,7 @@
 @File       : video.py
 @License    : GNU GENERAL PUBLIC LICENSE
 """
-from config import get_session, verify, config
+from config import get_session, verify, config, clean_path
 from sql import get_failed_video, set_video_dl_status_success, get_video_info
 from bilibili_api.video import get_download_url, get_pages
 from user import mid2name
@@ -176,6 +176,7 @@ class Video:
         logger.info(f'bvid: {self._bvid}, 开始下载视频，page: {len(pages)}')
         for page in range(len(pages)):
             logger.info(f'开始下载第{page+1}个视频')
+            file_name = clean_path(f"P{page + 1} {pages[page]['part']}")
             try:
                 logger.info('开始获取视频地址')
                 info = get_download_url(bvid=self._bvid, page=page, verify=verify)
@@ -191,7 +192,6 @@ class Video:
                         return False
                     logger.info('音视频下载成功')
                     temp_video_path = os.path.join(self._video_path_temp, 'video_temp.mp4')
-                    file_name = f"P{page+1} {pages[page]['part']}"
                     video_path = os.path.join(self._video_path, f'{file_name}.mp4')
                     logger.info('开始移动音视频位置')
                     copy(temp_video_path, video_path)
@@ -206,7 +206,7 @@ class Video:
 
                 if not self._get_audio(info['dash']['audio'][0]['baseUrl']):
                     return False
-                if not self._combine_video(f"P{page+1} {pages[page]['part']}"):
+                if not self._combine_video(file_name):
                     return False
             except KeyError:
                 logger.warning(f'KeyError: bvid={self._bvid}, page={page}')

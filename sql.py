@@ -9,7 +9,7 @@
 
 import sqlite3
 from os import path, makedirs
-from config import config
+from config import config, clean_path
 from bilibili_api import user
 import bilibili_api
 from shutil import rmtree
@@ -75,7 +75,7 @@ def add_up(mid):
     except sqlite3.OperationalError:
         pass
     try:
-        cursor.execute("INSERT INTO up VALUES (?, ?, ?, ?)", (mid, info['name'], info['face'], info['sign'],))
+        cursor.execute("INSERT INTO up VALUES (?, ?, ?, ?)", (mid, clean_path(info['name']), info['face'], info['sign'],))
         conn.commit()
     except sqlite3.IntegrityError:
         logger.warning('up主已经在跟踪列表')

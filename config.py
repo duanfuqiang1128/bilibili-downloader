@@ -51,3 +51,7 @@ def get_session():
     logger.info('获取session')
     return sessions
 
+
+def clean_path(path: str) -> str:
+    path = path.replace('/', '|')
+    return path.replace('\\', '|')
