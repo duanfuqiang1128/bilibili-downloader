@@ -23,7 +23,7 @@ logger = logging.getLogger('pontus.video')
 
 
 def get_media_thread(url, media_content_list, index, media_range):
-    logger.info(f'子线程获取分段视频数据，index: {index}，media_range: {media_range}')
+    logger.debug(f'子线程获取分段视频数据，index: {index}，media_range: {media_range}')
     start_time = time.time()
     session = get_session()
     session.headers.update({
@@ -32,10 +32,10 @@ def get_media_thread(url, media_content_list, index, media_range):
     try:
         r = session.get(url)
     except Exception as e:
-        logger.error(f'子线程下载分段视频失败，ERROR：{repr(e)}')
+        logger.warning(f'子线程下载分段视频失败，ERROR：{repr(e)}')
         return
     if r.status_code != 206:
-        logger.error(f'子线程分段视频获取错误，HTTP CODE：{r.status_code}')
+        logger.warning(f'子线程分段视频获取错误，HTTP CODE：{r.status_code}')
         return
     media_content_list[index] = r
     logger.info(f'子线程分段视频下载成功，index: {index}用时：{time.time()-start_time}')
@@ -47,7 +47,7 @@ def get_media(url, file_path, media_range):
     start = int(media_range[0])
     end = int(media_range[1])
     step = int((end-start) / thread_num)
-    logger.info(f'下载分段视频，长度:{end-start}')
+    logger.info(f'下载分段视频，长度:{media_range}')
     if end - start < config['SEGMENT']['MIN_SIZE'] * MB:
         media_content_list = [None] * 1
         get_media_thread(url, media_content_list, 0, f'{start}-{end}')
@@ -59,6 +59,7 @@ def get_media(url, file_path, media_range):
             if index == thread_num - 1:
                 thread_end = end
             thread_temp = Thread(target=get_media_thread, args=(url, media_content_list, index, f'{start+step*index}-{thread_end}'))
+            logger.debug(f'分片范围：{start+step*index}:{thread_end}')
             thread_pool.append(thread_temp)
             thread_temp.start()
         for thread in thread_pool:
@@ -70,7 +71,7 @@ def get_media(url, file_path, media_range):
             try:
                 f.write(r.content)
             except AttributeError:
-                logger.error('分段视频文件写入错误，r.content属性不存在')
+                logger.warning('分段视频文件写入错误，r.content属性不存在')
                 return False
     logger.info(f'写入成功，用时：{time.time()-start_time}')
     return True
@@ -87,10 +88,10 @@ def _split_media(url) -> []:
     try:
         r = session.get(url)
     except Exception:
-        logger.error('请求发送失败')
+        logger.warning('请求发送失败')
         return split_list
     if not r.headers['Content-Range']:
-        logger.error('返回头不包含Content-Range字段')
+        logger.warning('返回头不包含Content-Range字段')
         return split_list
     content_range = r.headers['Content-Range'].split('/')
     content_range = int(content_range[1])
