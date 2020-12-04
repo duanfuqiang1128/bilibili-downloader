@@ -10,10 +10,14 @@
 from sql import get_up_video, insert_video, get_up_name, get_up_all_track
 from config import get_session
 from bilibili_api.user import get_videos_raw
+import logging
+
+logger = logging.getLogger('pontus.user')
 
 
 class User:
     def __init__(self, uid):
+        logger.info('初始化User')
         self._uid = uid
         self._get_local_data()
         self._session = get_session()
@@ -25,6 +29,7 @@ class User:
     def update_video(self):
         page = 1
         videos = []
+        logger.info('获取up主新视频')
         while True:
             try:
                 count = 0
@@ -54,11 +59,13 @@ class User:
 
 
 def mid2name(mid):
+    logger.info('mid到name转换')
     return get_up_name(mid)
 
 
 def get_track_up():
     temp_up_list = []
+    logger.info('获取追踪的up主列表')
     for up in get_up_all_track():
         temp_up_list.append(up['mid'])
     return temp_up_list

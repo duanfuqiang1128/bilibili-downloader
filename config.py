@@ -9,6 +9,10 @@
 from requests import session
 from bilibili_api import Verify
 from json import loads
+import logging
+
+logger = logging.getLogger('pontus.config')
+logger.info('读取配置文件')
 
 with open('config.json', 'rt', encoding='utf-8') as f:
     user_config = loads(f.read())
@@ -26,6 +30,7 @@ config = {
 }
 
 if (config['BILIBILI']['SESSDATA'] == "") | (config['BILIBILI']['CSRF'] == ""):
+    logger.info('登录账号')
     verify = Verify()
 else:
     verify = Verify(sessdata=config['BILIBILI']['SESSDATA'], csrf=config['BILIBILI']['CSRF'])
@@ -39,5 +44,6 @@ def get_session():
                       'Chrome/86.0.4240.198 Safari/537.36',
         'Origin': 'https://www.bilibili.com',
     })
+    logger.info('获取session')
     return sessions
 

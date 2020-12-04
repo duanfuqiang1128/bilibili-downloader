@@ -13,22 +13,29 @@ from config import config
 from bilibili_api import user
 import bilibili_api
 from shutil import rmtree
+import logging
+
+logger = logging.getLogger('pontus.sql')
 
 db_path = path.join(config['DATA_PATH'], '.db')
 if not path.exists(db_path):
+    logger.info('数据库不存在，自动创建新数据库')
     makedirs(db_path)
 conn = sqlite3.connect(path.join(db_path, 'bilibili.db'))
 
 
 def get_up_name(mid):
+    logger.info(f'获取up主名称')
     cursor = conn.cursor()
     name = cursor.execute("SELECT name FROM up WHERE mid = ?", (mid,)).fetchone()
     if not name:
+        logger.error('up主不存在')
         return "None"
     return name[0]
 
 
 def get_up_video(mid):
+    logger.info(f'获取up主的视频列表')
     cursor = conn.cursor()
     try:
         cursor.execute("CREATE TABLE video (bvid TEXT PRIMARY KEY, title TEXT, mid INTEGER, author TEXT, status TEXT, "
@@ -43,6 +50,7 @@ def get_up_video(mid):
 
 
 def get_up_all_track():
+    logger.info(f'获取跟踪的所有up主')
     cursor = conn.cursor()
     temp_up_list = []
     for up in cursor.execute("SELECT mid, name FROM up").fetchall():
@@ -54,9 +62,11 @@ def get_up_all_track():
 
 
 def add_up(mid):
+    logger.info(f'添加up主')
     try:
         info = user.get_user_info(uid=int(mid))
     except bilibili_api.exceptions.BilibiliException:
+        logger.warning('up主不存在')
         print('该up主不存在')
         return
     cursor = conn.cursor()
@@ -68,6 +78,7 @@ def add_up(mid):
         cursor.execute("INSERT INTO up VALUES (?, ?, ?, ?)", (mid, info['name'], info['face'], info['sign'],))
         conn.commit()
     except sqlite3.IntegrityError:
+        logger.warning('up主已经在跟踪列表')
         print('up主已经在跟踪中...'
               '\n请勿重复添加！')
         return
@@ -75,7 +86,9 @@ def add_up(mid):
 
 
 def delete_up(mid):
+    logger.info(f'开始删除up主')
     if input('是否删除该up主所有视频文件?(yes/no)').strip() == 'yes':
+        logger.info(f'删除up主本地的所有视频')
         try:
             rmtree(path.join(config['DATA_PATH'], get_up_name(mid)))
         except FileNotFoundError:
@@ -88,6 +101,7 @@ def delete_up(mid):
 
 
 def insert_video(video):
+    logger.info(f'添加新视频到数据库')
     cursor = conn.cursor()
     try:
         cursor.execute("CREATE TABLE video (bvid TEXT PRIMARY KEY, title TEXT, mid INTEGER, author TEXT, status TEXT, "
@@ -102,10 +116,12 @@ def insert_video(video):
                         video['create'], video['pic'],))
         conn.commit()
     except sqlite3.IntegrityError:
+        logger.warning('添加的视频已经存在')
         pass
 
 
 def get_failed_video():
+    logger.info(f'获取所有没下载的视频')
     cursor = conn.cursor()
     videos_temp = []
     for video in cursor.execute("SELECT bvid FROM video WHERE status = ?", ('deficiency',)).fetchall():
@@ -116,6 +132,7 @@ def get_failed_video():
 
 
 def get_video_info(bvid):
+    logger.info(f'获取视频信息')
     cursor = conn.cursor()
     video_info = cursor.execute("SELECT mid, title FROM video WHERE bvid = ?", (bvid,)).fetchone()
     return {
@@ -125,6 +142,7 @@ def get_video_info(bvid):
 
 
 def set_video_dl_status_success(bvid: str):
+    logger.info(f'更新视频状态为已下载')
     cursor = conn.cursor()
     cursor.execute("UPDATE video SET status = ? WHERE bvid = ?", ('success', bvid,))
     conn.commit()

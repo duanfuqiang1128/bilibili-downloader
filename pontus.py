@@ -20,7 +20,7 @@ file_handle = logging.FileHandler('log/pontus.log')
 formatter = logging.Formatter('%(asctime)s-%(levelname)s-%(name)s-%(filename)s, line:%(lineno)d-%(message)s')
 file_handle.setFormatter(formatter)
 logger.addHandler(file_handle)
-logger.info("程序启动")
+logger.info("启动程序")
 
 
 if __name__ == '__main__':
