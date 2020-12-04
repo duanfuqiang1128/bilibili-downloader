@@ -97,10 +97,10 @@ def _split_media(url) -> []:
     content_range = int(content_range[1])
     split_num = int(content_range / split_step)
     if split_num == 0:
-        return [f'0-{content_range}']
+        return [f'0-{content_range-1}']
     for i in range(split_num):
         split_list.append(f'{split_step*i}-{split_step*(i+1)-1}')
-    split_list.append(f'{split_step*split_num}-{content_range}')
+    split_list.append(f'{split_step*split_num}-{content_range-1}')
     return split_list
 
 
@@ -143,7 +143,7 @@ class Video:
         video_path = os.path.join(self._video_path_temp, 'audio_temp.mp4')
         for url_part in split_list:
             if not get_media(dl_url, video_path, url_part):
-                logger.warning(f'获取分段视频错误, 分片:{url_part}')
+                logger.warning(f'获取分段音频错误, 分片:{url_part}')
                 return False
         return True
 
