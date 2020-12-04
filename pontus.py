@@ -8,6 +8,20 @@
 """
 from manage import update_video, add_up, delete_up, show_track_up
 from fire import Fire
+import logging
+import os
+
+if not os.path.exists('log'):
+    os.makedirs('log')
+#  日志格式：时间-消息文本记录级别-日志记录器名称-文件名-发出日志记录行数-消息内容
+logging.basicConfig(datefmt='%Y/%d/%m %I:%M:%S')
+logging.info('Started')
+logger = logging.getLogger('pontus')
+logger.setLevel(logging.DEBUG)
+file_handle = logging.FileHandler('log/pontus.log')
+formatter = logging.Formatter('%(asctime)s-%(levelname)s-%(name)s-%(filename)s-%(lineno)d-%(message)s')
+file_handle.setFormatter(formatter)
+logger.addHandler(file_handle)
 
 
 def help_command():
