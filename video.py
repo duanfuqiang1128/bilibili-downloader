@@ -13,6 +13,7 @@ from user import mid2name
 import os
 from shutil import rmtree, copy
 from threading import Thread
+import subprocess
 
 MB = 1000000
 
@@ -125,9 +126,9 @@ class Video:
     def _combine_video(self, file_name):
         temp_video_path = os.path.join(self._video_path_temp, 'video_temp.mp4')
         temp_audio_path = os.path.join(self._video_path_temp, 'audio_temp.mp4')
-        video_path = os.path.join(self._video_path, f'{file_name}.mp4')
-        cmd = f'ffmpeg -hide_banner -loglevel panic -i "{temp_audio_path}" -i "{temp_video_path}" -acodec copy -vcodec copy "{video_path}"'
-        if os.system(cmd) != 0:
+        video_path = os.path.join(self._video_path, f'{file_name.strip()}.mp4')
+        cmd = ['ffmpeg', '-hide_banner', '-loglevel', 'panic', '-i', temp_audio_path, '-i', temp_video_path, '-acodec', 'copy', '-vcodec', 'copy', video_path]
+        if subprocess.run(cmd) != 0:
             return False
         try:
             rmtree(self._video_path_temp)
