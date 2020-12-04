@@ -6,7 +6,7 @@
 @File       : manage.py
 @License    : GNU GENERAL PUBLIC LICENSE
 """
-from sql import get_up_all_track, db_init
+from sql import get_up_all_track, db_init, up_is_exist
 import sql
 from user import get_track_up, User, mid2name
 from video import download_failed_video
@@ -34,9 +34,12 @@ def add_up(mid):
 
 def delete_up(mid):
     db_init()
+    if not up_is_exist(mid):
+        print('未跟踪该up主!')
+        return
     if not sql.delete_up(mid):
         print('删除失败！')
-        return False
+        return
     print('删除成功！')
 
 

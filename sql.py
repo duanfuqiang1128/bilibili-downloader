@@ -143,5 +143,13 @@ def db_init():
         pass
 
 
+def up_is_exist(mid):
+    cursor = conn.cursor()
+    data = cursor.execute('SELECT mid FROM up WHERE mid = ?', (mid,))
+    if not data.fetchone():
+        return False
+    return True
+
+
 if __name__ == '__main__':
     pass
