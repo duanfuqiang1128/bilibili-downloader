@@ -130,5 +130,18 @@ def set_video_dl_status_success(bvid: str):
     conn.commit()
 
 
+def db_init():
+    cursor = conn.cursor()
+    try:
+        cursor.execute("CREATE TABLE video (bvid TEXT PRIMARY KEY, title TEXT, mid INTEGER, author TEXT, status TEXT, "
+                       "is_union_video TEXT, create_time INTEGER, pic TEXT)")
+    except sqlite3.OperationalError:
+        pass
+    try:
+        cursor.execute("CREATE TABLE up (mid INTEGER PRIMARY KEY, name TEXT, face TEXT, sign TEXT)")
+    except sqlite3.OperationalError:
+        pass
+
+
 if __name__ == '__main__':
     pass

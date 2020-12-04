@@ -6,13 +6,14 @@
 @File       : manage.py
 @License    : GNU GENERAL PUBLIC LICENSE
 """
-from sql import get_up_all_track
+from sql import get_up_all_track, db_init
 import sql
 from user import get_track_up, User, mid2name
 from video import download_failed_video
 
 
 def update_video():
+    db_init()
     ups = get_track_up()
     if len(ups) == 0:
         print('没有正在跟踪的up主！')
@@ -27,10 +28,12 @@ def update_video():
 
 
 def add_up(mid):
+    db_init()
     sql.add_up(mid)
 
 
 def delete_up(mid):
+    db_init()
     if not sql.delete_up(mid):
         print('删除失败！')
         return False
@@ -38,6 +41,7 @@ def delete_up(mid):
 
 
 def show_track_up():
+    db_init()
     count = 0
     for up in get_up_all_track():
         print('%-10s' % up['mid'], up['name'])
