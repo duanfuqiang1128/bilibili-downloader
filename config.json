@@ -10,5 +10,9 @@
   "BILIBILI_ACCOUNT": {
     "SESSDATA": "",
     "CSRF": ""
+  },
+  "LOG": {
+    "MAX_SIZE": 100,
+    "MAX_FILE_BACKUP_NUM": 5
   }
 }

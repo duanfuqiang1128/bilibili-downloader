@@ -27,6 +27,10 @@ config = {
         "MAX_SIZE": user_config['SEGMENT']['MAX_SIZE'],
         "MIN_SIZE": user_config['SEGMENT']['MIN_SIZE'],
     },
+    'LOG': {
+        'MAX_FILE_BACKUP_NUM': user_config['LOG']['MAX_FILE_BACKUP_NUM'],
+        'MAX_SIZE': user_config['LOG']['MAX_SIZE'],
+    }
 }
 
 if (config['BILIBILI']['SESSDATA'] == "") | (config['BILIBILI']['CSRF'] == ""):

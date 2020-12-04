@@ -224,4 +224,4 @@ def download_failed_video():
         video_dl = Video(video['bvid'])
         if video_dl.get_video():
             set_video_dl_status_success(video['bvid'])
-            logger.info(f'视频下载成功su')
+            logger.info(f'视频下载成功')
