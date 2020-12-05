@@ -296,3 +296,4 @@ DerivedData/
 /*.gcno
 
 .idea/
+release/
