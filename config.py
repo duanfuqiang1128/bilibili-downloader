@@ -10,7 +10,7 @@ from requests import session
 from bilibili_api import Verify
 from json import loads
 import logging
-from subprocess import check_call
+from subprocess import check_output
 
 logger = logging.getLogger('pontus.config')
 logger.info('读取配置文件')
@@ -38,7 +38,7 @@ config = {
 
 def check_ffmpeg():
     try:
-        check_call(['ffmpeg', '-version'])
+        check_output(['ffmpeg', '-version'])
     except Exception:
         logger.debug('ffmpeg不存在')
         return False
