@@ -10,6 +10,7 @@ from requests import session
 from bilibili_api import Verify
 from json import loads
 import logging
+from subprocess import check_call
 
 logger = logging.getLogger('pontus.config')
 logger.info('读取配置文件')
@@ -30,15 +31,27 @@ config = {
     'LOG': {
         'MAX_FILE_BACKUP_NUM': user_config['LOG']['MAX_FILE_BACKUP_NUM'],
         'MAX_SIZE': user_config['LOG']['MAX_SIZE'],
-    }
+    },
+    'FFMPEG': 'ffmpeg',
 }
+
+
+def check_ffmpeg():
+    try:
+        check_call(['ffmpeg', '-version'])
+    except Exception:
+        logger.debug('ffmpeg不存在')
+        return False
+    return True
+
 
 if (config['BILIBILI']['SESSDATA'] == "") | (config['BILIBILI']['CSRF'] == ""):
     logger.info('登录账号')
     verify = Verify()
 else:
     verify = Verify(sessdata=config['BILIBILI']['SESSDATA'], csrf=config['BILIBILI']['CSRF'])
-
+if not check_ffmpeg():
+    config['FFMPEG'] = './bin/ffmpeg'
 
 def get_session():
     sessions = session()

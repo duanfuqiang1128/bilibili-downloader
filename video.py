@@ -152,7 +152,7 @@ class Video:
         temp_video_path = os.path.join(self._video_path_temp, 'video_temp.mp4')
         temp_audio_path = os.path.join(self._video_path_temp, 'audio_temp.mp4')
         video_path = os.path.join(self._video_path, f'{file_name.strip()}.mp4')
-        cmd = ['ffmpeg', '-hide_banner', '-loglevel', 'panic', '-i', temp_audio_path, '-i', temp_video_path, '-acodec', 'copy', '-vcodec', 'copy', video_path]
+        cmd = [config['FFMPEG'], '-hide_banner', '-loglevel', 'panic', '-i', temp_audio_path, '-i', temp_video_path, '-acodec', 'copy', '-vcodec', 'copy', video_path]
         try:
             subprocess.run(cmd, capture_output=True, check=True)
             logger.info('合并成功')
