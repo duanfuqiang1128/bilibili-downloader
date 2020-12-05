@@ -10,12 +10,13 @@ from requests import session
 from bilibili_api import Verify
 from json import loads
 import logging
+import os
 from subprocess import check_output
 
 logger = logging.getLogger('pontus.config')
 logger.info('读取配置文件')
 
-with open('config.json', 'rt', encoding='utf-8') as f:
+with open(os.path.join(os.path.split(os.path.realpath(__file__))[0], 'config.json'), 'rt', encoding='utf-8') as f:
     user_config = loads(f.read())
 config = {
     'BILIBILI': {
