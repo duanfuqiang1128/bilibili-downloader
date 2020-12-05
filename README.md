@@ -32,12 +32,22 @@ BILIBILI-DOWNLOADER
 
 ## 安装
 
-安装[ffmpeg](https://ffmpeg.org/download.html)
+### 安装python
+
+[下载](https://www.python.org/downloads/release/python-379/)
+
+### 安装依赖包
+
+```bash
+pip install -r requirements.txt
+# 使用清华源
+pip install -i https://pypi.tuna.tsinghua.edu.cn/simple -r requirements.txt
+```
 
 ### 下载程序
 [下载程序](https://github.com/duanfuqiang1128/bilibili-downloader/releases)
 
-解压后，进入程序目录，或将程序路径添加进系统环境变量
+解压后，进入程序目录，或将程序所在目录添加进系统环境变量后
 `pontus help`
 
 ### 源码编译安装
@@ -46,7 +56,7 @@ BILIBILI-DOWNLOADER
 1. [下载源码](https://github.com/duanfuqiang1128/bilibili-downloader/releases)
 2. `pip install -r requirements.txt`
 3. `python -m nuitka --follow-imports --plugin-enable=pylint-warnings pontus.py`
-4. 将可执行文件 pontus 添加进系统环境变量
+4. 将可执行文件 pontus 所在目录 添加进系统环境变量
 
 **注意，在linux等系统中，需要赋予程序可执行权限**
 `chmod +x pontus`
