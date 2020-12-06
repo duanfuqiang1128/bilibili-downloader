@@ -16,8 +16,11 @@ from threading import Thread
 import subprocess
 import logging
 import time
+from tqdm import tqdm
 
 MB = 1000000
+_tqdm = tqdm(total=1, desc=''.ljust(30), unit_scale=True, colour='#FFFFFF')
+_all_video_num = 0
 
 logger = logging.getLogger('pontus.video')
 
@@ -73,6 +76,7 @@ def get_media(url, file_path, media_range):
             except AttributeError:
                 logger.warning('分段视频文件写入错误，r.content属性不存在')
                 return False
+    _tqdm.update(end - start)
     logger.info(f'写入成功，用时：{time.time()-start_time}')
     return True
 
@@ -106,6 +110,7 @@ def _split_media(url) -> []:
 
 class Video:
     def __init__(self, bvid):
+        self._page = 0
         logger.info(f'初始化Video, bvid: {bvid}')
         self._bvid = bvid
         self._get_video_info()
@@ -128,8 +133,11 @@ class Video:
         self._up_name = mid2name(self._mid)
 
     def _get_video(self, dl_url):
+        global _tqdm
         logger.info('开始下载视频')
         split_list = _split_media(dl_url)
+        _tqdm.set_description(f'[{self._up_name}] {self._title}: P{self._page} 🎬')
+        _tqdm.reset(int(split_list[-1].split('-')[1]))
         video_path = os.path.join(self._video_path_temp, 'video_temp.mp4')
         for url_part in split_list:
             if not get_media(dl_url, video_path, url_part):
@@ -138,8 +146,11 @@ class Video:
         return True
 
     def _get_audio(self, dl_url):
+        global _tqdm
         logger.info('开始下载音频')
         split_list = _split_media(dl_url)
+        _tqdm.set_description(f'[{self._up_name}] {self._title}: P{self._page} 🎧')
+        _tqdm.reset(int(split_list[-1].split('-')[1]))
         video_path = os.path.join(self._video_path_temp, 'audio_temp.mp4')
         for url_part in split_list:
             if not get_media(dl_url, video_path, url_part):
@@ -172,10 +183,12 @@ class Video:
         return True
 
     def get_video(self):
+        global _tqdm
         pages = get_pages(bvid=self._bvid, verify=verify)
         logger.info(f'bvid: {self._bvid}, 开始下载视频，page: {len(pages)}')
         for page in range(len(pages)):
             logger.info(f'开始下载第{page+1}个视频')
+            self._page = page + 1
             file_name = clean_path(f"P{page + 1} {pages[page]['part']}")
             try:
                 logger.info('开始获取视频地址')
@@ -219,9 +232,14 @@ class Video:
 
 
 def download_failed_video():
+    global _all_video_num
     logger.info(f'开始下载所有未下载的视频')
     data = get_failed_video()
+    _all_video_num = len(data)
+    _download_video_index = 0
     for video in data:
+        _download_video_index += 1
+        _tqdm.set_postfix_str(f'{str(_download_video_index).rjust(5)}/{str(_all_video_num).ljust(5)}')
         video_dl = Video(video['bvid'])
         if video_dl.get_video():
             set_video_dl_status_success(video['bvid'])
