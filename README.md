@@ -30,13 +30,19 @@ BILIBILI-DOWNLOADER
 
 # 快速开始
 
-## 安装
+## 源码安装
 
 ### 安装python
 
 [下载](https://www.python.org/downloads/release/python-379/)
 
-### 安装依赖包
+### 下载程序
+
+```shell script
+git clone https://github.com/duanfuqiang1128/bilibili-downloader.git
+```
+
+### 安装依赖
 
 ```bash
 pip install -r requirements.txt
@@ -44,22 +50,11 @@ pip install -r requirements.txt
 pip install -i https://pypi.tuna.tsinghua.edu.cn/simple -r requirements.txt
 ```
 
-### 下载程序
-[下载程序](https://github.com/duanfuqiang1128/bilibili-downloader/releases)
+### 开始使用
 
-解压后，进入程序目录，或将程序所在目录添加进系统环境变量后
-`pontus help`
-
-### 源码编译安装
-
-**⚠️注意：需要有C编译环境，如gcc等**
-1. [下载源码](https://github.com/duanfuqiang1128/bilibili-downloader/releases)
-2. `pip install -r requirements.txt`
-3. `python -m nuitka --follow-imports --plugin-enable=pylint-warnings pontus.py`
-4. 将可执行文件 pontus 所在目录 添加进系统环境变量
-
-**注意，在linux等系统中，需要赋予程序可执行权限**
-`chmod +x pontus`
+```shell script
+python pontus.py COMMAND
+```
 
 ## 基本使用
 UID: 要跟踪up主的账号ID(UID/MID)
