@@ -38,9 +38,8 @@ BILIBILI-DOWNLOADER
 
 ### 下载程序
 
-```shell script
-git clone https://github.com/duanfuqiang1128/bilibili-downloader.git
-```
+1. [源代码](https://github.com/duanfuqiang1128/bilibili-downloader/releases)
+2. 解压
 
 ### 安装依赖
 
