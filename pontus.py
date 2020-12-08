@@ -55,5 +55,9 @@ if __name__ == '__main__':
         for up in up_list:
             if up not in up_list_new:
                 delete_up(up)
+        up_list = up_list_new
+        if not up_list:
+            sleep(5)
+            continue
         update_video()
-        sleep(300)
+        sleep(60)
