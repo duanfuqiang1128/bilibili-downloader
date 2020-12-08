@@ -60,4 +60,4 @@ if __name__ == '__main__':
             sleep(5)
             continue
         update_video()
-        sleep(60)
+        sleep(300)
