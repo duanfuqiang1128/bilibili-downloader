@@ -6,7 +6,7 @@
     "MAX_SIZE": 20,
     "MIN_SIZE": 5
   },
-  "DATA_PATH": "",
+  "DATA_PATH": "/video",
   "BILIBILI_ACCOUNT": {
     "SESSDATA": "",
     "CSRF": ""

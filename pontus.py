@@ -7,11 +7,11 @@
 @License    : GNU GENERAL PUBLIC LICENSE
 """
 from manage import update_video, add_up, delete_up, show_track_up, help_command
-from fire import Fire
 import logging
 import logging.handlers
 import os
 from config import config
+from time import sleep
 
 MB = 1000000
 
@@ -27,11 +27,33 @@ logger.addHandler(file_handle)
 logger.info("启动程序")
 
 
+def read_up_list():
+    up_list_temp = []
+    with open('up_list.txt', 'rt') as f:
+        while True:
+            line = f.readline().strip()
+            if line and line != '':
+                up_list_temp.append(int(line))
+                continue
+            break
+    return up_list_temp
+
+
 if __name__ == '__main__':
-    Fire({
-        'help': help_command,
-        'update': update_video,
-        'add': add_up,
-        'delete': delete_up,
-        'show': show_track_up,
-    })
+    if os.path.exists(config['DATA_PATH']):
+        os.makedirs(config['DATA_PATH'])
+    up_list = []
+    while True:
+        try:
+            up_list_new = read_up_list()
+        except ValueError:
+            print('up列表格式不正确，回滚旧配置。')
+            up_list_new = up_list
+        for up in up_list_new:
+            if up not in up_list:
+                add_up(up)
+        for up in up_list:
+            if up not in up_list_new:
+                delete_up(up)
+        update_video()
+        sleep(300)

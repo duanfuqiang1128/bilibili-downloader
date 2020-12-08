@@ -87,12 +87,11 @@ def add_up(mid):
 
 def delete_up(mid):
     logger.info(f'开始删除up主')
-    if input('是否删除该up主所有视频文件?(yes/no)').strip() == 'yes':
-        logger.info(f'删除up主本地的所有视频')
-        try:
-            rmtree(path.join(config['DATA_PATH'], get_up_name(mid)))
-        except FileNotFoundError:
-            pass
+    logger.info(f'删除up主本地的所有视频')
+    try:
+        rmtree(path.join(config['DATA_PATH'], get_up_name(mid)))
+    except FileNotFoundError:
+        pass
     cursor = conn.cursor()
     cursor.execute("DELETE FROM video where mid = ?", (mid,))
     cursor.execute("DELETE FROM up where mid = ?", (mid,))
