@@ -40,7 +40,7 @@ def read_up_list():
 
 
 if __name__ == '__main__':
-    if os.path.exists(config['DATA_PATH']):
+    if not os.path.exists(config['DATA_PATH']):
         os.makedirs(config['DATA_PATH'])
     up_list = []
     while True:
