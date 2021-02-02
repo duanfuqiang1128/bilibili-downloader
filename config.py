@@ -77,4 +77,5 @@ def clean_path(path: str) -> str:
     path = path.replace('*', '-')
     path = path.replace('?', '？')
     path = path.replace('\\', '-')
+    path = path.replace('.', '。')
     return path.replace('\\', '#').strip()
