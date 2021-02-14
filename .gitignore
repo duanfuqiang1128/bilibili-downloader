@@ -163,6 +163,10 @@ cython_debug/
 .idea/**/uiDesigner.xml
 .idea/**/dbnavigator.xml
 
+#Vscode
+.vscode
+.vscode/
+
 # Gradle
 .idea/**/gradle.xml
 .idea/**/libraries
